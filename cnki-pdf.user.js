@@ -2,7 +2,7 @@
 // @name        CNKI PDF Download
 // @description 中国知网 PDF 下载
 // @author      Arnie97
-// @version     2018.05.24
+// @version     2018.05.25
 // @license     MIT
 // @grant       none
 // @namespace   https://github.com/Arnie97
@@ -22,9 +22,7 @@
     const hash = '#pdfDownload';
 
     console.debug(location.href);
-    if (location.hostname === host && location.hash.endsWith(hash)) {
-        location.href = $('.pdf>a')[0].href;
-    } else if (!location.pathname.includes('detail.aspx')) {
+    if (!location.pathname.includes('detail.aspx')) {
         $('a').forEach(a => {
             if (!a.href.includes('download.aspx')) {
                 return;
@@ -44,11 +42,19 @@
                 a.text = 'PDF 下载';
                 a.target = 'framecatalog_CkFiles';
                 a.href = location.href.replace('kns.cnki.net', host);
+                window.open(a.href, a.target);  // preload the page
                 a.href += hash;
             }
         });
     } else if ($('li.pdf').length) {
-        return;
+        if (location.hostname !== host) {
+            return;
+        }
+        window.addEventListener('hashchange', () => {
+            if (location.hash.endsWith(hash)) {
+                location.href = $('.pdf>a')[0].href;
+            }
+        });
     } else {
         $('li.readol').forEach(li => {
             let a = _.createElement('a');
