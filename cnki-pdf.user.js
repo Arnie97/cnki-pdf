@@ -62,11 +62,13 @@
         if (location.hostname !== host) {
             return;
         }
-        window.addEventListener('hashchange', () => {
+        let pdfDownload = () => {
             if (location.hash.endsWith(hash)) {
                 location.href = $('.pdf>a')[0].href;
             }
-        });
+        };
+        window.addEventListener('hashchange', pdfDownload);
+        pdfDownload();
     } else {
         $('li.readol').forEach(li => {
             let a = _.createElement('a');
