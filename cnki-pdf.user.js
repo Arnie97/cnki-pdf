@@ -23,14 +23,21 @@
 
     console.debug(location.href);
     if (!location.pathname.includes('detail.aspx')) {
-        $('a').forEach(a => {
-            if (!a.href.includes('download.aspx')) {
+        $('a').forEach(i => {
+            if (!i.href.includes('download.aspx')) {
                 return;
-            } else if (a.href.includes('&dflag')) {
+            }
+            let a = i.parentNode.appendChild(i.cloneNode());
+
+            if (a.href.includes('&dflag')) {
                 a.href = a.href.replace('nhdown', 'pdfdown');
             } else {
                 a.href += '&dflag=pdfdown';
             }
+
+            // change the icon color
+            a.classList.add('briefDl_D');
+            a.classList.remove('briefDl_Y');
         });
     } else if (_.title.endsWith(' - 中国知网')) {
         $('.dllink>a').forEach(a => {
