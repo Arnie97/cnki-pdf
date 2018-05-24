@@ -40,18 +40,23 @@
             a.classList.remove('briefDl_Y');
         });
     } else if (_.title.endsWith(' - 中国知网')) {
-        $('.dllink>a').forEach(a => {
-            if (!a.href.includes('download.aspx')) {
+        $('.dllink>a:first-child').forEach(i => {
+            if (!i.text.includes('整本下载')) {
                 return;
-            } else if (a.text.includes('整本下载')) {
-                a.text = 'CAJ 下载';
-            } else if (a.text.includes('分页下载')) {
-                a.text = 'PDF 下载';
-                a.target = 'framecatalog_CkFiles';
-                a.href = location.href.replace('kns.cnki.net', host);
-                window.open(a.href, a.target);  // preload the page
-                a.href += hash;
             }
+            i.text = 'CAJ 下载';
+            i.classList.remove('icon-dlGreen');
+
+            let a = i.parentNode.insertBefore(i.cloneNode(), i.nextSibling);
+            a.text = 'PDF 下载';
+            a.target = 'framecatalog_CkFiles';
+            a.href = location.href.replace('kns.cnki.net', host);
+            window.open(a.href, a.target);  // preload the page
+            a.href += hash;
+
+            // change the button icon
+            i.classList.add('icon-dlcaj');
+            a.classList.add('icon-dlpdf');
         });
     } else if ($('li.pdf').length) {
         if (location.hostname !== host) {
